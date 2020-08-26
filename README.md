@@ -3,9 +3,9 @@
 ## [Level 1](https://github.com/Wottrich/android-workshop-CRUD/tree/feature/level_1)
 - ✅ MVP
 - ✅ Retrofit with HOF Callbacks
+- ✅ DataBinding
 - ❌ LiveData
 - ❌ ViewModel
-- ❌ DataBinding
 - ❌ Coroutines 
 - ❌ Network architecture
 - ❌ Flow
@@ -14,9 +14,9 @@
 ## Level 2 - In progress
 - ✅ MVP -> MVVM
 - ✅ Retrofit with HOF Callbacks
+- ✅ DataBinding
 - ✅ LiveData
 - ✅ ViewModel
-- ✅ DataBinding
 - ❌ Coroutines 
 - ❌ Network architecture
 - ❌ Flow
@@ -25,9 +25,9 @@
 ## Level 3 - In progress
 - ✅ MVVM
 - ~Retrofit with HOF Callbacks~
+- ✅ DataBinding
 - ✅ LiveData
 - ✅ ViewModel
-- ✅ DataBinding
 - ✅ Coroutines 
 - ✅ Network architecture
 - ✅ DI
@@ -36,9 +36,9 @@
 ## Level 4 - In progress
 - ✅ MVVM
 - ~Retrofit with HOF Callbacks~
+- ✅ DataBinding
 - ✅ LiveData
 - ✅ ViewModel
-- ✅ DataBinding
 - ✅ Coroutines 
 - ✅ Network architecture
 - ✅ DI
