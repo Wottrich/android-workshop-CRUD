@@ -8,6 +8,8 @@
 - ❌ DataBinding
 - ❌ Coroutines 
 - ❌ Network architecture
+- ❌ Flow
+- ❌ DI
 
 ## Level 2 - In progress
 - ✅ MVP -> MVVM
@@ -17,6 +19,8 @@
 - ✅ DataBinding
 - ❌ Coroutines 
 - ❌ Network architecture
+- ❌ Flow
+- ❌ DI
 
 ## Level 3 - In progress
 - ✅ MVVM
@@ -26,6 +30,16 @@
 - ✅ DataBinding
 - ✅ Coroutines 
 - ✅ Network architecture
+- ✅ DI
+- ❌ Flow
 
-## Level 4 -> Level 3 + Flow - In progress
+## Level 4 - In progress
+- ✅ MVVM
+- ~Retrofit with HOF Callbacks~
+- ✅ LiveData
+- ✅ ViewModel
+- ✅ DataBinding
+- ✅ Coroutines 
+- ✅ Network architecture
+- ✅ DI
 - ✅ Flow
