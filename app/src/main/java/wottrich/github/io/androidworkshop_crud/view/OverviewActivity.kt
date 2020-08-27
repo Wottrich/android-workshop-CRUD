@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import wottrich.github.io.androidworkshop_crud.R
@@ -12,30 +11,29 @@ import wottrich.github.io.androidworkshop_crud.databinding.ActivityOverviewBindi
 import wottrich.github.io.androidworkshop_crud.view.adapter.UserAdapter
 import wottrich.github.io.androidworkshop_crud.viewModel.EditViewModel
 import wottrich.github.io.androidworkshop_crud.viewModel.OverviewViewModel
-import wottrich.github.io.androidworkshop_crud.viewModel.OverviewViewModelInteraction
 
-class OverviewActivity : AppCompatActivity(), OverviewViewModelInteraction {
+class OverviewActivity : AppCompatActivity() {
 
     private val activity = this
 
     private val viewModel: OverviewViewModel by lazy {
-        OverviewViewModel(interaction = this)
+        OverviewViewModel()
     }
 
     private lateinit var binding: ActivityOverviewBinding
 
     private val adapter: UserAdapter by lazy {
-        UserAdapter(this, viewModel.users)
+        UserAdapter(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_overview)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_overview)
 
         setupListeners()
-        setupWatchers()
         setupRecycler()
+        setupObservables()
+        setupBinding()
     }
 
     override fun onResume() {
@@ -43,12 +41,19 @@ class OverviewActivity : AppCompatActivity(), OverviewViewModelInteraction {
         loadData()
     }
 
+    private fun setupBinding () {
+        binding.apply {
+            lifecycleOwner = activity
+            viewModel = activity.viewModel
+        }
+    }
+
     private fun setupListeners () {
 
         binding.apply {
             btnRegister.setOnClickListener {
-                viewModel.createUser()
-                binding.etName.setText("")
+                activity.viewModel.createUser()
+                etName.setText("")
             }
         }
 
@@ -62,16 +67,6 @@ class OverviewActivity : AppCompatActivity(), OverviewViewModelInteraction {
 
     }
 
-    private fun setupWatchers() {
-
-        binding.apply {
-            etName.doAfterTextChanged {
-                viewModel.setName(it.toString())
-            }
-        }
-
-    }
-
     private fun setupRecycler() {
 
         binding.apply {
@@ -82,25 +77,22 @@ class OverviewActivity : AppCompatActivity(), OverviewViewModelInteraction {
 
     }
 
-    private fun loadData() {
-        showLoading(true)
-        viewModel.loadUsers()
-    }
+    private fun setupObservables() {
+        viewModel.apply {
 
-    private fun showLoading(isVisible: Boolean) {
-        binding.apply {
-            rvUsers.isVisible = !isVisible
-            progressBar.isVisible = isVisible
+            errorMessage.observe(activity) {
+                Toast.makeText(activity, it ?: "Error desconhecido", Toast.LENGTH_SHORT).show()
+            }
+
+            users.observe(activity) {
+                activity.adapter.setItems(it ?: listOf())
+            }
+
         }
     }
 
-    override fun error(message: String?) {
-        Toast.makeText(this, message ?: "Erro desconhecido", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun reloadUsers() {
-        showLoading(false)
-        adapter.setItems(viewModel.users)
+    private fun loadData() {
+        viewModel.loadUsers()
     }
 
 }

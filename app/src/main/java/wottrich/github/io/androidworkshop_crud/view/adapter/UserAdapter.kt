@@ -18,9 +18,10 @@ import wottrich.github.io.androidworkshop_crud.model.User
  
 class UserAdapter(
     context: Context,
-    private var items: List<User>,
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 ): RecyclerView.Adapter<UserViewHolder>() {
+
+    private var items: List<User> = listOf()
 
     var onDelete: (User) -> Unit = {}
     var onEdit: (User) -> Unit = {}

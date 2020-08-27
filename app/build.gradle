@@ -53,6 +53,7 @@ dependencies {
 
     //Android
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle"
+    implementation "androidx.activity:activity-ktx:$activity_version"
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
