@@ -1,5 +1,6 @@
 package wottrich.github.io.androidworkshop_crud.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import wottrich.github.io.androidworkshop_crud.R
 import wottrich.github.io.androidworkshop_crud.databinding.ActivityOverviewBinding
 import wottrich.github.io.androidworkshop_crud.view.adapter.UserAdapter
+import wottrich.github.io.androidworkshop_crud.viewModel.EditViewModel
 import wottrich.github.io.androidworkshop_crud.viewModel.OverviewViewModel
 import wottrich.github.io.androidworkshop_crud.viewModel.OverviewViewModelInteraction
 
@@ -23,10 +25,7 @@ class OverviewActivity : AppCompatActivity(), OverviewViewModelInteraction {
     private lateinit var binding: ActivityOverviewBinding
 
     private val adapter: UserAdapter by lazy {
-        UserAdapter(this, viewModel.users).apply {
-            onDelete = viewModel::deleteUser
-            onEdit = viewModel::editUser
-        }
+        UserAdapter(this, viewModel.users)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,38 +36,48 @@ class OverviewActivity : AppCompatActivity(), OverviewViewModelInteraction {
         setupListeners()
         setupWatchers()
         setupRecycler()
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadData()
     }
 
     private fun setupListeners () {
 
-        binding.btnRegister.setOnClickListener {
-            if (viewModel.isEditing) {
-                viewModel.updateUser()
-            } else {
+        binding.apply {
+            btnRegister.setOnClickListener {
                 viewModel.createUser()
                 binding.etName.setText("")
             }
         }
 
-        binding.btnCancel.setOnClickListener {
-            viewModel.cancelEdit()
+        adapter.onEdit = {
+            val intent = Intent(this, EditActivity::class.java)
+            intent.putExtra(EditViewModel.keyUserEdit, it)
+            startActivity(intent)
         }
+
+        adapter.onDelete = viewModel::deleteUser
 
     }
 
     private fun setupWatchers() {
 
-        binding.etName.doAfterTextChanged {
-            viewModel.updateName(it.toString())
+        binding.apply {
+            etName.doAfterTextChanged {
+                viewModel.setName(it.toString())
+            }
         }
 
     }
 
     private fun setupRecycler() {
 
-        binding.rvUsers.apply {
-            adapter = activity.adapter
+        binding.apply {
+            rvUsers.apply {
+                adapter = activity.adapter
+            }
         }
 
     }
@@ -79,26 +88,19 @@ class OverviewActivity : AppCompatActivity(), OverviewViewModelInteraction {
     }
 
     private fun showLoading(isVisible: Boolean) {
-        binding.rvUsers.isVisible = !isVisible
-        binding.progressBar.isVisible = isVisible
+        binding.apply {
+            rvUsers.isVisible = !isVisible
+            progressBar.isVisible = isVisible
+        }
     }
 
     override fun error(message: String?) {
         Toast.makeText(this, message ?: "Erro desconhecido", Toast.LENGTH_SHORT).show()
     }
 
-    override fun updateUsers() {
+    override fun reloadUsers() {
         showLoading(false)
         adapter.setItems(viewModel.users)
-    }
-
-    override fun onEditing(name: String?) {
-        binding.etName.setText(name)
-        binding.btnCancel.isVisible = name != null
-
-        val text = if (name != null) R.string.activity_overview_edit_button_text
-        else R.string.activity_overview_register_button_text
-        binding.btnRegister.setText(text)
     }
 
 }

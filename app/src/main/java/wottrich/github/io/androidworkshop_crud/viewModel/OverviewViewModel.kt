@@ -15,8 +15,7 @@ import wottrich.github.io.androidworkshop_crud.model.User
 
 interface OverviewViewModelInteraction {
     fun error(message: String?)
-    fun updateUsers ()
-    fun onEditing (name: String?)
+    fun reloadUsers ()
 }
 
 class OverviewViewModel(
@@ -24,64 +23,43 @@ class OverviewViewModel(
     private val interaction: OverviewViewModelInteraction
 ) {
 
-    var users: List<User> = listOf()
+    private var _users: List<User>? = null
+    val users: List<User>
+        get() = _users ?: listOf()
 
-    val isEditing: Boolean
-        get() = editingUser != null
+    private var _name: String? = null
+    val name: String
+        get() = _name ?: ""
 
-    private var _name: String = ""
-
-    private var editingUser: User? = null
-
-    fun updateName (name: String) {
-        this._name = name
+    //=====> SCREEN
+    fun setName (name: String) {
+        _name = name
     }
 
+    //=====> UTILS
     private fun requestCallback (users: List<User>?, messageError: String?) {
         if (users != null) {
-            this.users = users
-            interaction.updateUsers()
+            _users = users
+            interaction.reloadUsers()
         } else {
             interaction.error(messageError)
         }
     }
 
-    fun editUser (user: User) {
-        this.editingUser = user
-        interaction.onEditing(user.name)
-    }
-
-    fun cancelEdit () {
-        this.editingUser = null
-        interaction.onEditing(null)
-    }
-
-    //=====> CRUD
-    fun createUser () {
-        if (_name.isNotEmpty()) {
-            service.createUser(_name) { users, messageError ->
-                requestCallback(users, messageError)
-            }
-        } else {
-            interaction.error("Preencha todos os campos")
-        }
-    }
-
+    //=====> SERVICES
     fun loadUsers() {
         service.loadUsers { users, messageError ->
             requestCallback(users, messageError)
         }
     }
 
-    fun updateUser () {
-        if (editingUser != null && _name.isNotEmpty()) {
-            service.updateUser(editingUser!!.id, _name) { users, messageError ->
+    fun createUser () {
+        if (name.isNotEmpty()) {
+            service.createUser(name) { users, messageError ->
                 requestCallback(users, messageError)
-                cancelEdit()
             }
         } else {
-            interaction.error("Não foi possivel editar o usuário")
-            cancelEdit()
+            interaction.error("Preencha todos os campos")
         }
     }
 

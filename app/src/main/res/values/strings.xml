@@ -4,4 +4,6 @@
     <string name="activity_overview_register_button_text">Registrar</string>
     <string name="activity_overview_edit_button_text">Editar</string>
     <string name="activity_overview_cancel_button_text">Cancelar</string>
+    <string name="activity_edit_title_toolbar">Editar usuário</string>
+    <string name="activity_overview_toolbar_title_home_screen">Tela inicial</string>
 </resources>

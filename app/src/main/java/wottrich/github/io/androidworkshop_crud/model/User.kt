@@ -1,5 +1,7 @@
 package wottrich.github.io.androidworkshop_crud.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -11,8 +13,9 @@ import java.math.BigInteger
  * Copyright © 2020 AndroidWorkshop-CRUD. All rights reserved.
  *
  */
- 
+
+@Parcelize
 data class User (
     val id: BigInteger,
     val name: String
-)
+): Parcelable
