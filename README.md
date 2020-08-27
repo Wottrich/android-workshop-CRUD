@@ -8,8 +8,8 @@
 - ❌ ViewModel
 - ❌ Coroutines 
 - ❌ Network architecture
-- ❌ Flow
 - ❌ DI
+- ❌ Flow
 
 ## [Level 2](https://github.com/Wottrich/android-workshop-CRUD/tree/feature/level_2)
 - ✅ MVP -> MVVM
@@ -19,8 +19,8 @@
 - ✅ ViewModel
 - ❌ Coroutines 
 - ❌ Network architecture
-- ❌ Flow
 - ❌ DI
+- ❌ Flow
 
 ## Level 3 - In progress
 - ✅ MVVM
