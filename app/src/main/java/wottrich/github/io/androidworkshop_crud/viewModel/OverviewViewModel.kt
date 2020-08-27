@@ -2,6 +2,7 @@ package wottrich.github.io.androidworkshop_crud.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSource
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSourceImpl
 import wottrich.github.io.androidworkshop_crud.model.User
@@ -17,7 +18,7 @@ import wottrich.github.io.androidworkshop_crud.model.User
 
 class OverviewViewModel(
     private val service: UserDataSource = UserDataSourceImpl()
-) {
+): ViewModel() {
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean>
