@@ -1,6 +1,8 @@
 package wottrich.github.io.androidworkshop_crud.viewModel
 
 import android.os.Bundle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSource
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSourceImpl
@@ -15,24 +17,31 @@ import wottrich.github.io.androidworkshop_crud.model.User
  *
  */
 
-interface EditViewModelInteraction {
-    fun error(message: String)
-    fun loadScreen ()
-    fun onEdited()
-}
+
 
 class EditViewModel (
-    private val service: UserDataSource = UserDataSourceImpl(),
-    private val interaction: EditViewModelInteraction
-) {
+    private val service: UserDataSource = UserDataSourceImpl()
+) : ViewModel(){
 
-    private var _userToEdit: User? = null
-    val userToEdit: User?
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    private val _userToEdit = MutableLiveData<User>()
+    val userToEdit: LiveData<User>
         get() = _userToEdit
 
-    private var _name: String? = null
+    val mutableName = MutableLiveData<String>()
     val name: String
-        get() = _name ?: ""
+        get() = mutableName.value ?: ""
+
+    private val _successService = MutableLiveData<Unit>()
+    val successService: LiveData<Unit>
+        get() = _successService
 
     companion object {
         const val keyUserEdit = "userToEdit"
@@ -42,31 +51,27 @@ class EditViewModel (
     fun loadExtras (extras: Bundle?) {
         val user = extras?.get(keyUserEdit)
         if (user != null) {
-            val userToEdit = user as User
-            _userToEdit = userToEdit
-            _name = userToEdit.name
-            interaction.loadScreen()
+            _userToEdit.value = user as User
+            mutableName.value = user.name
         } else {
-            interaction.error("Extras não encontrado")
+            _errorMessage.value = "Extras não encontrado"
         }
-    }
-
-    fun setName (name: String) {
-        _name = name
     }
 
     //=====> SERVICES
     fun updateUser () {
-        if (name.isNotEmpty() && userToEdit != null) {
-            service.updateUser(userToEdit!!.id, name) { _, messageError ->
+        if (name.isNotEmpty() && _userToEdit.value != null) {
+            _isLoading.value = true
+            service.updateUser(_userToEdit.value!!.id, name) { _, messageError ->
+                _isLoading.value = false
                 if (messageError == null) {
-                    interaction.onEdited()
+                    _successService.value = Unit
                 } else {
-                    interaction.error(messageError)
+                    _errorMessage.value = messageError
                 }
             }
         } else {
-            interaction.error("Ocorreu um erro ao editar o usuário")
+            _errorMessage.value = "Ocorreu um erro ao editar o usuário"
         }
     }
 

@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="wottrich.github.io.androidworkshop_crud.viewModel.OverviewViewModel"/>
+
+        <variable
+            name="viewModel"
+            type="OverviewViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +42,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etName"
+                android:text="@={ viewModel.mutableName }"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="no"
@@ -66,6 +73,7 @@
             app:layout_constraintTop_toBottomOf="@id/btnRegister" />
 
         <ProgressBar
+            visibleGone="@{ viewModel.loading }"
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

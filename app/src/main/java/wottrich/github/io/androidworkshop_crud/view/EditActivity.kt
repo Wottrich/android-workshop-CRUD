@@ -3,6 +3,7 @@ package wottrich.github.io.androidworkshop_crud.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -10,33 +11,35 @@ import wottrich.github.io.androidworkshop_crud.R
 import wottrich.github.io.androidworkshop_crud.archive.hideKeyboard
 import wottrich.github.io.androidworkshop_crud.databinding.ActivityEditBinding
 import wottrich.github.io.androidworkshop_crud.viewModel.EditViewModel
-import wottrich.github.io.androidworkshop_crud.viewModel.EditViewModelInteraction
 
-class EditActivity : AppCompatActivity(), EditViewModelInteraction {
+class EditActivity : AppCompatActivity() {
 
     private val activity = this
     private lateinit var binding: ActivityEditBinding
 
-    private val viewModel: EditViewModel by lazy {
-        EditViewModel(
-            interaction = this
-        )
-    }
+    private val viewModel: EditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit)
 
         viewModel.loadExtras(intent.extras)
+        setupBinding()
         setupListeners()
-        setupWatchers()
+        setupObservables()
+    }
+
+    private fun setupBinding () {
+        binding.apply {
+            lifecycleOwner = activity
+            viewModel = activity.viewModel
+        }
     }
 
     private fun setupListeners () {
         binding.apply {
             btnEdit.setOnClickListener {
                 hideKeyboard(it?.windowToken)
-                progressBar.isVisible = true
                 activity.viewModel.updateUser()
             }
 
@@ -46,27 +49,19 @@ class EditActivity : AppCompatActivity(), EditViewModelInteraction {
         }
     }
 
-    private fun setupWatchers () {
+    private fun setupObservables () {
+        viewModel.apply {
+            errorMessage.observe(activity) {
+                Toast.makeText(activity, it ?: "Erro desconhecido", Toast.LENGTH_SHORT).show()
+            }
 
-        binding.apply {
-            etName.doAfterTextChanged {
-                activity.viewModel.setName(it.toString())
+            userToEdit.observe(activity) {
+                binding.etName.setText(it?.name)
+            }
+
+            successService.observe(activity) {
+                finish()
             }
         }
-
-    }
-
-    override fun error(message: String) {
-        binding.progressBar.isVisible = false
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun loadScreen() {
-        binding.etName.setText(viewModel.name)
-    }
-
-    override fun onEdited() {
-        binding.progressBar.isVisible = false
-        finish()
     }
 }
