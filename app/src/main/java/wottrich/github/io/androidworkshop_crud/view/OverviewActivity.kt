@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import wottrich.github.io.androidworkshop_crud.R
@@ -16,9 +17,7 @@ class OverviewActivity : AppCompatActivity() {
 
     private val activity = this
 
-    private val viewModel: OverviewViewModel by lazy {
-        OverviewViewModel()
-    }
+    private val viewModel: OverviewViewModel by viewModels()
 
     private lateinit var binding: ActivityOverviewBinding
 
