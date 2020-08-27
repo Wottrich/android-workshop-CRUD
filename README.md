@@ -11,7 +11,7 @@
 - ❌ Flow
 - ❌ DI
 
-## Level 2 - In progress
+## [Level 2](https://github.com/Wottrich/android-workshop-CRUD/tree/feature/level_2)
 - ✅ MVP -> MVVM
 - ✅ Retrofit with HOF Callbacks
 - ✅ DataBinding
