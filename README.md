@@ -14,6 +14,7 @@ Api used to build this app: [api-workshop-CRUD](https://github.com/Wottrich/api-
 - ❌ Network architecture
 - ❌ DI
 - ❌ Flow
+- ❌ Room
 
 ## [Level 2](https://github.com/Wottrich/android-workshop-CRUD/tree/feature/level_2)
 - ✅ MVP -> MVVM
@@ -25,6 +26,7 @@ Api used to build this app: [api-workshop-CRUD](https://github.com/Wottrich/api-
 - ❌ Network architecture
 - ❌ DI
 - ❌ Flow
+- ❌ Room
 
 ## [Level 3](https://github.com/Wottrich/android-workshop-CRUD/tree/feature/level_3)
 - ✅ MVVM
@@ -36,6 +38,7 @@ Api used to build this app: [api-workshop-CRUD](https://github.com/Wottrich/api-
 - ✅ Network architecture
 - ✅ DI
 - ❌ Flow
+- ❌ Room
 
 ## Level 4 - In progress
 - ✅ MVVM
@@ -47,3 +50,4 @@ Api used to build this app: [api-workshop-CRUD](https://github.com/Wottrich/api-
 - ✅ Network architecture
 - ✅ DI
 - ✅ Flow
+- ✅ Room
