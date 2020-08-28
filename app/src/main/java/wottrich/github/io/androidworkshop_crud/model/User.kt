@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -20,10 +21,10 @@ import java.math.BigInteger
 
 @Entity(tableName = "user")
 @Parcelize
-data class User (
-    @PrimaryKey(autoGenerate = true)
-    val _id: Long? = null,
+data class User(
     @ColumnInfo(name = "item_id")
-    val id: BigInteger?,
+    @SerializedName("id")
+    @PrimaryKey
+    val id: Long,
     val name: String
-): Parcelable
+) : Parcelable

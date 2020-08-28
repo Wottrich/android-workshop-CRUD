@@ -8,6 +8,7 @@ import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSource
 import wottrich.github.io.androidworkshop_crud.util.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
 import wottrich.github.io.androidworkshop_crud.util.AppDispatchers
+import wottrich.github.io.androidworkshop_crud.util.resource.Status
 
 /**
  * @author Wottrich
@@ -35,6 +36,16 @@ class OverviewViewModel(
     private val name: String
         get() = mutableName.value ?: ""
 
+    init {
+        viewModelScope.launch(dispatchers.io) {
+            service.loadUsers(true).collect {
+                if (it.status == Status.SUCCESS) {
+                    _users.postValue(it)
+                }
+            }
+        }
+    }
+
     //=====> UTILS
     private suspend fun Flow<Resource<List<User>>>.requestCallback () {
         this.collect {
@@ -43,11 +54,9 @@ class OverviewViewModel(
     }
 
     //=====> SERVICES
-
-
     fun loadUsers() {
         viewModelScope.launch(dispatchers.main) {
-            service.loadUsers().requestCallback()
+            service.loadUsers(false).requestCallback()
         }
     }
 

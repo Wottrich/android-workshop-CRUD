@@ -1,6 +1,7 @@
 package wottrich.github.io.androidworkshop_crud.di
 
 import org.koin.dsl.module
+import wottrich.github.io.androidworkshop_crud.data.dao.UserDao
 import wottrich.github.io.androidworkshop_crud.data.database.AppDatabase
 import wottrich.github.io.androidworkshop_crud.data.repository.UserRepository
 import wottrich.github.io.androidworkshop_crud.data.repository.UserRepositoryImpl
@@ -16,7 +17,7 @@ import wottrich.github.io.androidworkshop_crud.data.repository.UserRepositoryImp
  
 object DatabaseModule {
     val databaseModule = module {
-        single { AppDatabase.getInstance(get()).userDao() }
+        single<UserDao> { AppDatabase.getInstance(get()).userDao() }
     }
 
     val repositoryModule = module {
