@@ -2,11 +2,10 @@ package wottrich.github.io.androidworkshop_crud.viewModel
 
 import android.os.Bundle
 import androidx.lifecycle.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSource
-import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSourceImpl
-import wottrich.github.io.androidworkshop_crud.data.resource.Resource
+import wottrich.github.io.androidworkshop_crud.util.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
 import wottrich.github.io.androidworkshop_crud.util.AppDispatchers
 
@@ -58,20 +57,12 @@ class EditViewModel (
     }
 
     //=====> SERVICES
-
-    private var usersService: LiveData<Resource<List<User>>> = MutableLiveData()
-
     fun updateUser () {
-        if (name.isNotEmpty() && _userToEdit.value != null) {
+        val userId = _userToEdit.value?.id
+        if (name.isNotEmpty() && userId != null) {
             viewModelScope.launch(dispatchers.main) {
 
-                _successService.removeSource(usersService)
-
-                withContext(dispatchers.io) {
-                    usersService = service.updateUser(_userToEdit.value!!.id, name)
-                }
-
-                _successService.addSource(usersService) {
+                service.updateUser(userId, name).collect {
                     _successService.postValue(it)
                 }
 

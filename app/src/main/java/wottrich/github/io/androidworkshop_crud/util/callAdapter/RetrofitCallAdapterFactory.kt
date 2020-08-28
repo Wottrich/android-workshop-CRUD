@@ -3,7 +3,7 @@ package wottrich.github.io.androidworkshop_crud.util.callAdapter
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
-import wottrich.github.io.androidworkshop_crud.data.resource.ApiResponse
+import wottrich.github.io.androidworkshop_crud.util.resource.ApiResponse
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 

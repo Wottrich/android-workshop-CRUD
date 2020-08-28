@@ -1,16 +1,12 @@
 package wottrich.github.io.androidworkshop_crud.data.datasource
 
-import androidx.lifecycle.LiveData
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import wottrich.github.io.androidworkshop_crud.archive.callRequest
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import wottrich.github.io.androidworkshop_crud.data.api.INetworkAPI
-import wottrich.github.io.androidworkshop_crud.data.network.RetrofitInstance
-import wottrich.github.io.androidworkshop_crud.data.resource.NetworkBoundResource
-import wottrich.github.io.androidworkshop_crud.data.resource.Resource
+import wottrich.github.io.androidworkshop_crud.data.repository.UserRepository
+import wottrich.github.io.androidworkshop_crud.util.resource.NetworkBoundResource
+import wottrich.github.io.androidworkshop_crud.util.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
-import java.math.BigInteger
 
 /**
  * @author Wottrich
@@ -22,49 +18,89 @@ import java.math.BigInteger
  */
 
 interface UserDataSource {
-    suspend fun loadUsers (): LiveData<Resource<List<User>>>
-    suspend fun createUser (name: String): LiveData<Resource<List<User>>>
-    suspend fun updateUser (id: BigInteger, newName: String): LiveData<Resource<List<User>>>
-    suspend fun deleteUser (user: User): LiveData<Resource<List<User>>>
+    suspend fun loadUsers (forceRefresh: Boolean): Flow<Resource<List<User>>>
+    suspend fun createUser (name: String): Flow<Resource<List<User>>>
+    suspend fun updateUser (id: Long, newName: String): Flow<Resource<List<User>>>
+    suspend fun deleteUser (user: User): Flow<Resource<List<User>>>
 }
 
 class UserDataSourceImpl (
-    private val api: INetworkAPI = RetrofitInstance.api
+    private val api: INetworkAPI,
+    private val repository: UserRepository
 ): UserDataSource {
 
-    override suspend fun loadUsers (): LiveData<Resource<List<User>>> {
-        return NetworkBoundResource<List<User>, List<User>>(
-            processResponse = { it },
-            call = { api.getUsers() }
-        ).build().asLiveData()
+    override suspend fun loadUsers (forceRefresh: Boolean): Flow<Resource<List<User>>> {
+        return flow {
+            NetworkBoundResource<List<User>, List<User>>(
+                collector = this,
+                saveCallResult = {
+                    repository.insertUser(it)
+                },
+                loadFromDb = {
+                    repository.users
+                },
+                shouldFetch = { usersDb ->
+                    forceRefresh || usersDb == null || usersDb.isEmpty()
+                },
+                processResponse = { it },
+                call = { api.getUsers() }
+            ).build()
+        }
     }
 
-    override suspend fun createUser(name: String): LiveData<Resource<List<User>>> {
+    override suspend fun createUser(name: String): Flow<Resource<List<User>>> {
         val body = hashMapOf(
             "name" to name
         )
-        return NetworkBoundResource<List<User>, List<User>>(
-            processResponse = { it },
-            call = { api.createUser(body) }
-        ).build().asLiveData()
+        return flow {
+            NetworkBoundResource<List<User>, List<User>>(
+                collector = this,
+                saveCallResult = {
+                    repository.insertUser(it)
+                },
+                loadFromDb = {
+                    repository.users
+                },
+                processResponse = { it },
+                call = { api.createUser(body) }
+            ).build()
+        }
     }
 
-    override suspend fun updateUser(id: BigInteger, newName: String): LiveData<Resource<List<User>>> {
+    override suspend fun updateUser(id: Long, newName: String): Flow<Resource<List<User>>> {
         val body = hashMapOf<String, Any>(
-            "id" to id,
+            "id" to id.toString(),
             "name" to newName
         )
-        return NetworkBoundResource<List<User>, List<User>>(
-            processResponse = { it },
-            call = { api.updateUser(body) }
-        ).build().asLiveData()
+        return flow {
+            NetworkBoundResource<List<User>, List<User>>(
+                collector = this,
+                saveCallResult = {
+                    repository.insertUser(it)
+                },
+                loadFromDb = {
+                    repository.users
+                },
+                processResponse = { it },
+                call = { api.updateUser(body) }
+            ).build()
+        }
     }
 
-    override suspend fun deleteUser(user: User): LiveData<Resource<List<User>>> {
-        return NetworkBoundResource<List<User>, List<User>>(
-            processResponse = { it },
-            call = { api.deleteUser(user.id.toString()) }
-        ).build().asLiveData()
+    override suspend fun deleteUser(user: User): Flow<Resource<List<User>>> {
+        return flow {
+            NetworkBoundResource<List<User>, List<User>>(
+                collector = this,
+                saveCallResult = {
+                    repository.insertUser(it)
+                },
+                loadFromDb = {
+                    repository.users
+                },
+                processResponse = { it },
+                call = { api.deleteUser(user.id.toString()) }
+            ).build()
+        }
     }
 
 }

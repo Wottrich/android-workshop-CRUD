@@ -5,7 +5,7 @@ import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import wottrich.github.io.androidworkshop_crud.data.resource.ApiResponse
+import wottrich.github.io.androidworkshop_crud.util.resource.ApiResponse
 import java.lang.UnsupportedOperationException
 
 /**

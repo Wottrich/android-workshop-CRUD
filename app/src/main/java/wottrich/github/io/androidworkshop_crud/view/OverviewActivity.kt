@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import wottrich.github.io.androidworkshop_crud.R
-import wottrich.github.io.androidworkshop_crud.data.resource.Status
+import wottrich.github.io.androidworkshop_crud.util.resource.Status
 import wottrich.github.io.androidworkshop_crud.databinding.ActivityOverviewBinding
 import wottrich.github.io.androidworkshop_crud.view.adapter.UserAdapter
 import wottrich.github.io.androidworkshop_crud.viewModel.EditViewModel

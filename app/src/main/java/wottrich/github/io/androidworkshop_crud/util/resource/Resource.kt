@@ -1,4 +1,4 @@
-package wottrich.github.io.androidworkshop_crud.data.resource
+package wottrich.github.io.androidworkshop_crud.util.resource
 
 /**
  * @author Wottrich

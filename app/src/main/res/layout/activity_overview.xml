@@ -6,7 +6,7 @@
     <data>
 
         <import type="wottrich.github.io.androidworkshop_crud.viewModel.OverviewViewModel"/>
-        <import type="wottrich.github.io.androidworkshop_crud.data.resource.Status"/>
+        <import type="wottrich.github.io.androidworkshop_crud.util.resource.Status"/>
 
         <variable
             name="viewModel"

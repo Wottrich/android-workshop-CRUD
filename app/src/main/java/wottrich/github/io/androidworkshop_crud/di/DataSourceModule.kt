@@ -15,6 +15,6 @@ import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSourceImp
  
 val dataSourceModule = module {
 
-    single<UserDataSource> { UserDataSourceImpl() }
+    single<UserDataSource> { UserDataSourceImpl(get(), get()) }
 
 }
