@@ -1,6 +1,6 @@
 # CRUD Game 
 
-If you liked this repository, please click in ⭐️ to make a developer happy :)
+If you liked this repository, please click on ⭐️ to make a developer happy :)
 
 Api used to build this app: [api-workshop-CRUD](https://github.com/Wottrich/api-workshop-CRUD)
 
