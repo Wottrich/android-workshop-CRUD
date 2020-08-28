@@ -26,7 +26,7 @@ Api used to build this app: [api-workshop-CRUD](https://github.com/Wottrich/api-
 - ❌ DI
 - ❌ Flow
 
-## Level 3 - In progress
+## [Level 3](https://github.com/Wottrich/android-workshop-CRUD/tree/feature/level_3)
 - ✅ MVVM
 - ~Retrofit with HOF Callbacks~
 - ✅ DataBinding
