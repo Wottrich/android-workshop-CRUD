@@ -1,12 +1,14 @@
 package wottrich.github.io.androidworkshop_crud.viewModel
 
 import android.os.Bundle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSource
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSourceImpl
+import wottrich.github.io.androidworkshop_crud.data.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
+import wottrich.github.io.androidworkshop_crud.util.AppDispatchers
 
 /**
  * @author Wottrich
@@ -20,12 +22,9 @@ import wottrich.github.io.androidworkshop_crud.model.User
 
 
 class EditViewModel (
-    private val service: UserDataSource = UserDataSourceImpl()
+    private val service: UserDataSource,
+    private val dispatchers: AppDispatchers
 ) : ViewModel(){
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String>
@@ -39,8 +38,8 @@ class EditViewModel (
     val name: String
         get() = mutableName.value ?: ""
 
-    private val _successService = MutableLiveData<Unit>()
-    val successService: LiveData<Unit>
+    private val _successService = MediatorLiveData<Resource<List<User>>>()
+    val successService: LiveData<Resource<List<User>>>
         get() = _successService
 
     companion object {
@@ -59,16 +58,23 @@ class EditViewModel (
     }
 
     //=====> SERVICES
+
+    private var usersService: LiveData<Resource<List<User>>> = MutableLiveData()
+
     fun updateUser () {
         if (name.isNotEmpty() && _userToEdit.value != null) {
-            _isLoading.value = true
-            service.updateUser(_userToEdit.value!!.id, name) { _, messageError ->
-                _isLoading.value = false
-                if (messageError == null) {
-                    _successService.value = Unit
-                } else {
-                    _errorMessage.value = messageError
+            viewModelScope.launch(dispatchers.main) {
+
+                _successService.removeSource(usersService)
+
+                withContext(dispatchers.io) {
+                    usersService = service.updateUser(_userToEdit.value!!.id, name)
                 }
+
+                _successService.addSource(usersService) {
+                    _successService.postValue(it)
+                }
+
             }
         } else {
             _errorMessage.value = "Ocorreu um erro ao editar o usuário"

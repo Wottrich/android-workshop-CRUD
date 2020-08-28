@@ -3,6 +3,7 @@ package wottrich.github.io.androidworkshop_crud.data.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import wottrich.github.io.androidworkshop_crud.data.api.INetworkAPI
+import wottrich.github.io.androidworkshop_crud.util.callAdapter.RetrofitCallAdapterFactory
 
 /**
  * @author Wottrich
@@ -22,6 +23,7 @@ object RetrofitInstance {
             .baseUrl(baseUrl)
             .client(Client.clientHTTP)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RetrofitCallAdapterFactory())
             .build()
             .create(INetworkAPI::class.java)
 

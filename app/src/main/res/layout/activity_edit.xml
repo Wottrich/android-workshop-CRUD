@@ -6,6 +6,7 @@
     <data>
 
         <import type="wottrich.github.io.androidworkshop_crud.viewModel.EditViewModel"/>
+        <import type="wottrich.github.io.androidworkshop_crud.data.resource.Status"/>
 
         <variable
             name="viewModel"
@@ -61,7 +62,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayoutName" />
 
         <ProgressBar
-            visibleGone="@{ viewModel.isLoading }"
+            visibleGone="@{ viewModel.successService.status == Status.LOADING }"
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
