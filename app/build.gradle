@@ -55,6 +55,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle"
     implementation "androidx.activity:activity-ktx:$activity_version"
 
+    //Koin Kotlin
+    implementation "org.koin:koin-core:$koin"
+    implementation "org.koin:koin-core-ext:$koin"
+
+    //Koin Android
+    implementation "org.koin:koin-androidx-scope:$koin"
+    implementation "org.koin:koin-androidx-viewmodel:$koin"
+    implementation "org.koin:koin-androidx-fragment:$koin"
+
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
@@ -69,5 +78,8 @@ dependencies {
     //Instrumental
     androidTestImplementation "androidx.test.ext:junit:$junit_ext"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
+
+    //Koin Test
+    testImplementation "org.koin:koin-test:$koin"
 
 }
