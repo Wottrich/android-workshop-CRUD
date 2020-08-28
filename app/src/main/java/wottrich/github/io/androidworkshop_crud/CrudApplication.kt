@@ -20,7 +20,6 @@ class CrudApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidLogger()
             androidContext(this@CrudApplication)
             modules(appModule)
         }

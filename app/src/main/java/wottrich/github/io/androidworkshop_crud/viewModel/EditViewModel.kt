@@ -20,7 +20,7 @@ import wottrich.github.io.androidworkshop_crud.model.User
 
 
 class EditViewModel (
-    private val service: UserDataSource = UserDataSourceImpl()
+    private val service: UserDataSource
 ) : ViewModel(){
 
     private val _isLoading = MutableLiveData<Boolean>()

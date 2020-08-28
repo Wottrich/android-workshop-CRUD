@@ -3,10 +3,8 @@ package wottrich.github.io.androidworkshop_crud.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import wottrich.github.io.androidworkshop_crud.R
 import wottrich.github.io.androidworkshop_crud.archive.hideKeyboard
 import wottrich.github.io.androidworkshop_crud.databinding.ActivityEditBinding
@@ -17,7 +15,7 @@ class EditActivity : AppCompatActivity() {
     private val activity = this
     private lateinit var binding: ActivityEditBinding
 
-    private val viewModel: EditViewModel by viewModels()
+    private val viewModel: EditViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

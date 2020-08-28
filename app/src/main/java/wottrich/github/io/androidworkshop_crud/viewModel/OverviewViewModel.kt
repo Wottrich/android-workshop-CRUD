@@ -17,7 +17,7 @@ import wottrich.github.io.androidworkshop_crud.model.User
  */
 
 class OverviewViewModel(
-    private val service: UserDataSource = UserDataSourceImpl()
+    private val service: UserDataSource
 ): ViewModel() {
 
     private val _loading = MutableLiveData<Boolean>()
