@@ -1,11 +1,13 @@
 package wottrich.github.io.androidworkshop_crud.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSource
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSourceImpl
+import wottrich.github.io.androidworkshop_crud.data.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
+import wottrich.github.io.androidworkshop_crud.util.AppDispatchers
 
 /**
  * @author Wottrich
@@ -17,19 +19,16 @@ import wottrich.github.io.androidworkshop_crud.model.User
  */
 
 class OverviewViewModel(
-    private val service: UserDataSource
+    private val service: UserDataSource,
+    private val dispatchers: AppDispatchers
 ): ViewModel() {
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean>
-        get() = _loading
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>>
+    private val _users = MediatorLiveData<Resource<List<User>>>()
+    val users: LiveData<Resource<List<User>>>
         get() = _users
 
     var mutableName = MutableLiveData<String>()
@@ -37,28 +36,35 @@ class OverviewViewModel(
         get() = mutableName.value ?: ""
 
     //=====> UTILS
-    private fun requestCallback (users: List<User>?, messageError: String?) {
-        _loading.value = false
-        if (users != null) {
-            _users.value = users
-        } else {
-            _errorMessage.value = messageError
+    private suspend fun LiveData<Resource<List<User>>>.requestCallback () {
+        _users.removeSource(usersService)
+
+        withContext(dispatchers.io) {
+            usersService = this@requestCallback
         }
+
+        _users.addSource(usersService) {
+            _users.postValue(it)
+        }
+
     }
 
     //=====> SERVICES
+
+    private var usersService: LiveData<Resource<List<User>>> = MutableLiveData()
+
     fun loadUsers() {
-        _loading.value = true
-        service.loadUsers { users, messageError ->
-            requestCallback(users, messageError)
+        viewModelScope.launch(dispatchers.main) {
+            service.loadUsers().requestCallback()
         }
     }
 
     fun createUser () {
-        _loading.value = true
-        if (name.isNotEmpty()) {
-            service.createUser(name) { users, messageError ->
-                requestCallback(users, messageError)
+        val userName = name
+        if (userName.isNotEmpty()) {
+            mutableName.value = ""
+            viewModelScope.launch(dispatchers.main) {
+                service.createUser(userName).requestCallback()
             }
         } else {
             _errorMessage.value = "Preencha todos os campos"
@@ -66,9 +72,8 @@ class OverviewViewModel(
     }
 
     fun deleteUser (user: User) {
-        _loading.value = true
-        service.deleteUser(user) { users, messageError ->
-            requestCallback(users, messageError)
+        viewModelScope.launch(dispatchers.main) {
+            service.deleteUser(user).requestCallback()
         }
     }
 

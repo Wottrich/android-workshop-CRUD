@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import wottrich.github.io.androidworkshop_crud.R
+import wottrich.github.io.androidworkshop_crud.data.resource.Status
 import wottrich.github.io.androidworkshop_crud.databinding.ActivityOverviewBinding
 import wottrich.github.io.androidworkshop_crud.view.adapter.UserAdapter
 import wottrich.github.io.androidworkshop_crud.viewModel.EditViewModel
@@ -51,7 +52,6 @@ class OverviewActivity : AppCompatActivity() {
         binding.apply {
             btnRegister.setOnClickListener {
                 activity.viewModel.createUser()
-                etName.setText("")
             }
         }
 
@@ -83,7 +83,16 @@ class OverviewActivity : AppCompatActivity() {
             }
 
             users.observe(activity) {
-                activity.adapter.setItems(it ?: listOf())
+                when (it?.status) {
+                    Status.SUCCESS -> {
+                        activity.adapter.setItems(it.data ?: listOf())
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(activity, it.message ?: "Error desconhecido", Toast.LENGTH_SHORT).show()
+                    }
+                    Status.LOADING -> Unit
+                }
+
             }
 
         }

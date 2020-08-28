@@ -2,6 +2,7 @@ package wottrich.github.io.androidworkshop_crud.data.api
 
 import retrofit2.Call
 import retrofit2.http.*
+import wottrich.github.io.androidworkshop_crud.data.resource.ApiResponse
 import wottrich.github.io.androidworkshop_crud.model.User
 
 /**
@@ -16,15 +17,15 @@ import wottrich.github.io.androidworkshop_crud.model.User
 interface INetworkAPI {
 
     @GET("users")
-    fun getUsers () : Call<List<User>>
+    suspend fun getUsers () : ApiResponse<List<User>>
 
     @POST("users/create")
-    fun createUser(@Body body: HashMap<String, String>) : Call<List<User>>
+    suspend fun createUser(@Body body: HashMap<String, String>) : ApiResponse<List<User>>
 
     @PUT("users/update")
-    fun updateUser(@Body body: HashMap<String, Any>) : Call<List<User>>
+    suspend fun updateUser(@Body body: HashMap<String, Any>) : ApiResponse<List<User>>
 
     @DELETE("users/delete/{id}")
-    fun deleteUser(@Path("id") id: String) : Call<List<User>>
+    suspend fun deleteUser(@Path("id") id: String) : ApiResponse<List<User>>
 
 }

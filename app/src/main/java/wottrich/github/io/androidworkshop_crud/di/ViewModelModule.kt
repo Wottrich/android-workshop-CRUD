@@ -16,8 +16,8 @@ import wottrich.github.io.androidworkshop_crud.viewModel.OverviewViewModel
  
 val viewModelModule = module {
 
-    viewModel { EditViewModel(get()) }
+    viewModel { EditViewModel(get(), get()) }
 
-    viewModel { OverviewViewModel(get()) }
+    viewModel { OverviewViewModel(get(), get()) }
 
 }

@@ -1,5 +1,8 @@
 package wottrich.github.io.androidworkshop_crud.di
 
+import org.koin.dsl.module
+import wottrich.github.io.androidworkshop_crud.util.AppDispatchers
+
 /**
  * @author Wottrich
  * @author wottrich78@gmail.com
@@ -9,9 +12,8 @@ package wottrich.github.io.androidworkshop_crud.di
  *
  */
  
-val appModule = listOf(
-    dispatcherModule,
-    networkModule,
-    dataSourceModule,
-    viewModelModule
-)
+val dispatcherModule = module {
+
+    single { AppDispatchers() }
+
+}

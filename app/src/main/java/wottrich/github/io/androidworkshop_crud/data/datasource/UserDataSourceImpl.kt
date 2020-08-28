@@ -1,11 +1,14 @@
 package wottrich.github.io.androidworkshop_crud.data.datasource
 
+import androidx.lifecycle.LiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import wottrich.github.io.androidworkshop_crud.archive.callRequest
 import wottrich.github.io.androidworkshop_crud.data.api.INetworkAPI
 import wottrich.github.io.androidworkshop_crud.data.network.RetrofitInstance
+import wottrich.github.io.androidworkshop_crud.data.resource.NetworkBoundResource
+import wottrich.github.io.androidworkshop_crud.data.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
 import java.math.BigInteger
 
@@ -18,40 +21,50 @@ import java.math.BigInteger
  *
  */
 
-typealias RequestCallback = (users: List<User>?, messageError: String?) -> Unit
-
 interface UserDataSource {
-    fun loadUsers (callback: RequestCallback)
-    fun createUser (name: String, callback: RequestCallback)
-    fun updateUser (id: BigInteger, newName: String, callback: RequestCallback)
-    fun deleteUser (user: User, callback: RequestCallback)
+    suspend fun loadUsers (): LiveData<Resource<List<User>>>
+    suspend fun createUser (name: String): LiveData<Resource<List<User>>>
+    suspend fun updateUser (id: BigInteger, newName: String): LiveData<Resource<List<User>>>
+    suspend fun deleteUser (user: User): LiveData<Resource<List<User>>>
 }
 
 class UserDataSourceImpl (
     private val api: INetworkAPI = RetrofitInstance.api
 ): UserDataSource {
 
-    override fun loadUsers (callback: (users: List<User>?, messageError: String?) -> Unit) {
-        api.getUsers().callRequest(callback)
+    override suspend fun loadUsers (): LiveData<Resource<List<User>>> {
+        return NetworkBoundResource<List<User>, List<User>>(
+            processResponse = { it },
+            call = { api.getUsers() }
+        ).build().asLiveData()
     }
 
-    override fun createUser (name: String, callback: (users: List<User>?, messageError: String?) -> Unit) {
+    override suspend fun createUser(name: String): LiveData<Resource<List<User>>> {
         val body = hashMapOf(
             "name" to name
         )
-        api.createUser(body).callRequest(callback)
+        return NetworkBoundResource<List<User>, List<User>>(
+            processResponse = { it },
+            call = { api.createUser(body) }
+        ).build().asLiveData()
     }
 
-    override fun updateUser (id: BigInteger, newName: String, callback: (users: List<User>?, messageError: String?) -> Unit) {
+    override suspend fun updateUser(id: BigInteger, newName: String): LiveData<Resource<List<User>>> {
         val body = hashMapOf<String, Any>(
             "id" to id,
             "name" to newName
         )
-        api.updateUser(body).callRequest(callback)
+        return NetworkBoundResource<List<User>, List<User>>(
+            processResponse = { it },
+            call = { api.updateUser(body) }
+        ).build().asLiveData()
     }
 
-    override fun deleteUser (user: User, callback: (users: List<User>?, messageError: String?) -> Unit) {
-        api.deleteUser(user.id.toString()).callRequest(callback)
+    override suspend fun deleteUser(user: User): LiveData<Resource<List<User>>> {
+        return NetworkBoundResource<List<User>, List<User>>(
+            processResponse = { it },
+            call = { api.deleteUser(user.id.toString()) }
+        ).build().asLiveData()
     }
 
 }
