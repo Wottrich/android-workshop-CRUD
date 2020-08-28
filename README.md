@@ -1,4 +1,8 @@
-# android-workshop-CRUD
+# CRUD Game 
+
+If you liked this repository, please click in ⭐️ to make a developer happy :)
+
+Api used to build this app: [api-workshop-CRUD](https://github.com/Wottrich/api-workshop-CRUD)
 
 ## [Level 1](https://github.com/Wottrich/android-workshop-CRUD/tree/feature/level_1)
 - ✅ MVP
