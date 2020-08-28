@@ -1,16 +1,12 @@
 package wottrich.github.io.androidworkshop_crud.data.datasource
 
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import wottrich.github.io.androidworkshop_crud.archive.callRequest
 import wottrich.github.io.androidworkshop_crud.data.api.INetworkAPI
 import wottrich.github.io.androidworkshop_crud.data.network.RetrofitInstance
-import wottrich.github.io.androidworkshop_crud.data.resource.NetworkBoundResource
-import wottrich.github.io.androidworkshop_crud.data.resource.Resource
+import wottrich.github.io.androidworkshop_crud.data.repository.UserRepository
+import wottrich.github.io.androidworkshop_crud.util.resource.NetworkBoundResource
+import wottrich.github.io.androidworkshop_crud.util.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
 import java.math.BigInteger
 
@@ -31,7 +27,8 @@ interface UserDataSource {
 }
 
 class UserDataSourceImpl (
-    private val api: INetworkAPI = RetrofitInstance.api
+    private val api: INetworkAPI,
+    private val repository: UserRepository
 ): UserDataSource {
 
     override suspend fun loadUsers (): Flow<Resource<List<User>>> {

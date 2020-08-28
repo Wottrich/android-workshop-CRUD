@@ -4,10 +4,8 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSource
-import wottrich.github.io.androidworkshop_crud.data.datasource.UserDataSourceImpl
-import wottrich.github.io.androidworkshop_crud.data.resource.Resource
+import wottrich.github.io.androidworkshop_crud.util.resource.Resource
 import wottrich.github.io.androidworkshop_crud.model.User
 import wottrich.github.io.androidworkshop_crud.util.AppDispatchers
 

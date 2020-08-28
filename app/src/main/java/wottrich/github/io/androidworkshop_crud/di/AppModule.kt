@@ -11,6 +11,8 @@ package wottrich.github.io.androidworkshop_crud.di
  
 val appModule = listOf(
     dispatcherModule,
+    DatabaseModule.databaseModule,
+    DatabaseModule.repositoryModule,
     networkModule,
     dataSourceModule,
     viewModelModule

@@ -20,6 +20,9 @@ buildscript {
         //DI
         koin = "2.1.6"
 
+        //Database
+        room_version = "2.2.5"
+
         //Retrofit
         retrofit = "2.9.0"
         logging_interceptor = "4.4.0"

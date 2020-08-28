@@ -1,8 +1,7 @@
 package wottrich.github.io.androidworkshop_crud.data.api
 
-import retrofit2.Call
 import retrofit2.http.*
-import wottrich.github.io.androidworkshop_crud.data.resource.ApiResponse
+import wottrich.github.io.androidworkshop_crud.util.resource.ApiResponse
 import wottrich.github.io.androidworkshop_crud.model.User
 
 /**

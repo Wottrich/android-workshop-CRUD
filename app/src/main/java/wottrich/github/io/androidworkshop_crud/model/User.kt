@@ -1,6 +1,10 @@
 package wottrich.github.io.androidworkshop_crud.model
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -14,8 +18,12 @@ import java.math.BigInteger
  *
  */
 
+@Entity(tableName = "user")
 @Parcelize
 data class User (
-    val id: BigInteger,
+    @PrimaryKey(autoGenerate = true)
+    val _id: Long? = null,
+    @ColumnInfo(name = "item_id")
+    val id: BigInteger?,
     val name: String
 ): Parcelable
