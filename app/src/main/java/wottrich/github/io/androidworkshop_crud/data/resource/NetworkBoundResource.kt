@@ -1,8 +1,8 @@
 package wottrich.github.io.androidworkshop_crud.data.resource
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.FlowCollector
 import kotlin.coroutines.coroutineContext
 
 /**
@@ -15,44 +15,30 @@ import kotlin.coroutines.coroutineContext
  */
 
 class NetworkBoundResource<ResultType, RequestType>(
+    private val collector: FlowCollector<Resource<ResultType>>,
     private val processResponse: (response: RequestType) -> ResultType,
     private val call: suspend () -> ApiResponse<RequestType>
 ) {
 
-    private val result = MutableLiveData<Resource<ResultType>>()
-    private val supervisorJob = SupervisorJob()
-
     suspend fun build(): NetworkBoundResource<ResultType, RequestType> {
-        withContext(Dispatchers.Main) {
-            setValue(Resource.loading())
-        }
-        CoroutineScope(coroutineContext).launch(supervisorJob) {
-            getResult()
-        }
+        collector.emit(Resource.loading())
+        fetchFromNetwork()
         return this
     }
 
-    private suspend fun getResult() {
+    private suspend fun fetchFromNetwork() {
         return when (val result = call()) {
             is ApiSuccessResponse -> {
                 val process = processResponse(result.body)
-                setValue(Resource.success(process))
+                collector.emit(Resource.success(process))
             }
             is ApiEmptyResponse -> {
-                setValue(Resource.success(null))
+                collector.emit(Resource.success(null))
             }
             is ApiErrorResponse -> {
-                setValue(Resource.error(result.error))
+                collector.emit(Resource.error(result.error))
             }
         }
     }
-
-    private fun setValue (newValue: Resource<ResultType>) {
-        if (result.value != newValue) {
-            result.postValue(newValue)
-        }
-    }
-
-    fun asLiveData() = result as LiveData<Resource<ResultType>>
 
 }
